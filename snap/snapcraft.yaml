@@ -1,0 +1,149 @@
+name: opensearch-dashboards # you probably want to 'snapcraft register <name>'
+base: core22 # the base snap is the execution environment for this snap
+
+version: '2.10.0' # just for humans, typically '1.2+git' or '1.3.2'
+
+summary: 'OpenSearch: community-driven, Apache 2.0-licensed search and analytics suite.'
+description: |
+    OpenSearch Dashboard is a community-driven, Apache 2.0-licensed open source 
+    user interface that lets you visualize your OpenSearch data and run and scale
+    your OpenSearch clusters.
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+
+confinement: strict # use 'strict' once you have the right plugs and slots
+
+architectures:
+  - build-on: amd64
+
+
+system-usernames:
+  snap_daemon: shared
+
+
+hooks:
+  install:
+    # plugs:
+    #   - network
+    #   - network-bind
+    #   - shmem-perf-analyzer
+    environment:
+      OPS_ROOT: ${SNAP_CURRENT}/opt/opensearch-dashboards
+
+  # configure:
+  #   environment:
+  #     OPS_ROOT: ${SNAP_CURRENT}/opt/opensearch-dashboards
+
+
+environment:
+  SNAP_CURRENT: /snap/opensearch-dashboards/current
+  SNAP_DATA_CURRENT: /var/snap/opensearch-dashboards/current
+
+  SNAP_LOG_DIR: ${SNAP_COMMON}/ops/snap/logs
+
+  OPS_ROOT: ${SNAP_CURRENT}/opt/opensearch
+
+
+  OPENSEARCH_DASHBOARDS_HOME: ${SNAP_CURRENT}/usr/share/opensearch-dashboards
+  OPENSEARCH_DASHBOARDS_BIN: ${OPENSEARCH_DASHBOARDS_HOME}/bin
+  OPENSEARCH_DASHBOARDS_CONFIG: ${SNAP_CURRENT}/etc/opensearch-dashboards
+
+  OPENSEARCH_DASHBOARDS_VARLOG: ${SNAP_COMMON}/var/log/opensearch-dashboards
+
+  NODE_HOME: ${OPENSEARCH_DASHBOARDS_HOME}/node
+
+  # OPENSEARCH_BIN: ${SNAP_CURRENT}/usr/share/opensearch/bin
+  # OPENSEARCH_JAVA_HOME: ${JAVA_HOME}
+  #
+  # OPENSEARCH_HOME: ${SNAP_DATA_CURRENT}/usr/share/opensearch
+  # OPENSEARCH_LIB: ${OPENSEARCH_HOME}/lib
+  # OPENSEARCH_PLUGINS: ${OPENSEARCH_HOME}/plugins
+  # OPENSEARCH_MODULES: ${OPENSEARCH_HOME}/modules
+  #
+  # OPENSEARCH_PATH_CONF: ${SNAP_DATA_CURRENT}/etc/opensearch
+  # OPENSEARCH_PATH_CERTS: ${SNAP_DATA_CURRENT}/etc/opensearch/certificates
+  #
+  # OPENSEARCH_VARLIB: ${SNAP_COMMON}/var/lib/opensearch
+  # OPENSEARCH_TMPDIR: ${SNAP_COMMON}/usr/share/tmp
+  # OPENSEARCH_VARLOG: ${SNAP_COMMON}/var/log/opensearch
+
+
+apps:
+  daemon:
+    daemon: simple
+    install-mode: disable
+    command: opt/opensearch-dashboards/start.sh
+    restart-condition: always
+    restart-delay: 20s
+    # reload-command: ${SNAP}/usr/share/ops/start.sh
+    # plugs:
+    #   - network
+    #   - network-bind
+    #   - log-observe
+    #   - mount-observe
+    #   - process-control
+    #   - shmem-perf-analyzer
+    #   - system-observe
+    #   - sys-fs-cgroup-service
+    # environment:
+    #   LD_LIBRARY_PATH: "${LD_LIBRARY_PATH}:${KNN_LIB_DIR}"
+
+  # setup:
+  #   command: opt/opensearch-dashboards/setup.sh
+
+parts:
+  dependencies:
+    plugin: nil
+    stage-snaps:
+      - yq
+    stage-packages:
+      - util-linux
+      - curl
+
+  wrapper-scripts:
+    plugin: nil
+    source: ./scripts
+    source-type: local
+    override-build: |
+      target_dir="${CRAFT_PART_INSTALL}/opt/opensearch-dashboards"
+      mkdir -p "${target_dir}"
+      cp -r wrappers/. "${target_dir}"
+      # cp -r helpers/ "${target_dir}/helpers"
+
+  nodejs:
+    plugin: nil
+    override-build: |
+      snap install node --channel=18/stable --classic
+
+  opensearch-dashboards:
+    plugin: npm
+    npm-include-node: true
+    npm-node-version: 18.16.0
+    source: .
+    override-build: |
+      # update deps
+      apt-get install unzip
+
+      version="$(craftctl get version)"
+      archive="opensearch-dashboards-2.10.0-linux-x64.tar.gz"
+      url="https://artifacts.opensearch.org/releases/bundle/opensearch-dashboards/2.10.0/${archive}"
+      curl  -L -o "${archive}" "${url}"
+
+      tar -xzvf "${archive}" -C "${CRAFT_PART_INSTALL}/" --strip-components=1
+
+      mkdir -p "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards"
+
+      mkdir -p "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
+      mv "${CRAFT_PART_INSTALL}"/config/* "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
+
+      declare -a resources=(
+        assets  bin  data  manifest.yml  node  node_modules  package.json  plugins  src LICENSE.txt  NOTICE.txt  README.txt
+      )
+
+      for res in "${resources[@]}"; do
+          mv "${CRAFT_PART_INSTALL}/${res}" "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/"
+      done
+      chmod -R 755 "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/bin"
+
+      # Final clean-up
+      rm "${archive}"
