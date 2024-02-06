@@ -42,9 +42,8 @@ function start_opensearch_dashboards () {
         --clear-groups \
         --reuid snap_daemon \
         --regid snap_daemon -- \
-        "${OPENSEARCH_DASHBOARDS_BIN}"/opensearch-dashboards \
+        ${OPENSEARCH_DASHBOARDS_BIN}/opensearch-dashboards -c ${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch_dashboards.yml
         # -l ${OPENSEARCH_DASHBOARDS_VARLOG} \
-        -c ${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch_dashboards.yml # \
         # -h ${host}
         # -e ${opensearch}
 }
