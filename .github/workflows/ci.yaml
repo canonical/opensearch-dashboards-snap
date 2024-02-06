@@ -1,0 +1,145 @@
+name: Build and Test
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  workflow_call:
+  pull_request:
+
+jobs:
+  build:
+    name: Build Snap
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      snap-file: ${{ steps.build-snap.outputs.snap }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install required dependencies
+        run: |
+          sudo snap install yq
+
+      - name: Upgrade linux deps
+        run: |
+          sudo apt-get update
+          
+          # install security updates
+          sudo apt-get -s dist-upgrade \
+            | grep "^Inst" \
+            | grep -i securi \
+            | awk -F " " {'print $2'} \
+            | xargs sudo apt-get install -y
+          
+          sudo apt-get autoremove -y
+          sudo apt-get clean -y
+          sudo snap refresh snapd
+
+      - id: build-snap
+        name: Build snap
+        uses: snapcore/action-build@v1
+        with:
+          snapcraft-channel: 7.x/candidate
+
+      - name: Upload built snap job artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: opensearch-dashboards_snap_amd64
+          path: "opensearch-dashboards_*.snap"
+
+  test:
+    name: Test Snap
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs:
+      - build
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Upgrade snapd
+        run: |
+          sudo snap refresh snapd
+
+      - name: Download snap file
+        uses: actions/download-artifact@v3
+        with:
+          name: opensearch-dashboards_snap_amd64
+          path: .
+
+      - name: Install snap file
+        run: |
+          version="$(cat snap/snapcraft.yaml | yq .version)"
+          
+          sudo snap remove --purge opensearch-dashboards
+          sudo snap install opensearch-dashboards_${version}_amd64.snap --dangerous --jailmode
+
+      - name: Setup the required system configs
+        run: |
+          sudo snap install opensearch --channel=2/candidate
+          sudo snap connect opensearch:process-control
+
+          sudo sysctl -w vm.swappiness=0
+          sudo sysctl -w vm.max_map_count=262144
+          sudo sysctl -w net.ipv4.tcp_retries2=5
+
+      - name: Connect required interfaces
+        run: |
+          sudo snap connect opensearch:log-observe
+          sudo snap connect opensearch:mount-observe
+          sudo snap connect opensearch:process-control
+          sudo snap connect opensearch:system-observe
+          sudo snap connect opensearch:sys-fs-cgroup-service
+          sudo snap connect opensearch:shmem-perf-analyzer
+
+      - name: Setup and Start OpenSearch
+        run: |
+          # create the certificates
+          sudo snap run opensearch.setup \
+              --node-name cm0 \
+              --node-roles cluster_manager,data \
+              --tls-priv-key-root-pass root1234 \
+              --tls-priv-key-admin-pass admin1234 \
+              --tls-priv-key-node-pass node1234 \
+              --tls-init-setup yes                 # this creates the root and admin certs as well.
+
+          # start opensearch
+          sudo snap start opensearch.daemon
+
+          # wait a bit for it to fully initialize
+          sleep 15s
+
+          # create the security index
+          sudo snap run opensearch.security-init --tls-priv-key-admin-pass=admin1234
+
+      - name: Install and test Opensearch Dashboard
+        run: |
+          sudo snap install opensearch-dashboards
+          sudo snap start opensearch-dashboards --host localhost:5601 --opensearch https://localhost:9200
+
+          authenticate_ok=$(curl -i  -k -XPOST http://localhost:5601/auth/login \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H 'osd-xsrf:true' \
+            -d '{"username":"kibanaserver","password":"kibanaserver"}' | grep "200 OK") 
+
+          if [ ! "$authenticate_ok" ]; then
+            exit 1
+          fi
+
+          wrong_credentials_fail=$(curl -i  -k -XPOST http://localhost:5601/auth/login \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H 'osd-xsrf:true' \
+            -d '{"username":"admin","password":"test"}' | grep "401 Unauthorized") 
+
+          if [ ! "$wrong_credentials_fail" ]; then
+            exit 1
+          fi
