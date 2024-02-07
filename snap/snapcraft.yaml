@@ -109,6 +109,14 @@ parts:
       target_dir="${CRAFT_PART_INSTALL}/opt/opensearch-dashboards"
       mkdir -p "${target_dir}"
       cp -r wrappers/. "${target_dir}"
+
+  helper-scripts:
+    plugin: nil
+    source: ./helpers
+    source-type: local
+    override-build: |
+      target_dir="${CRAFT_PART_INSTALL}/opt/opensearch-dashboards"
+      mkdir -p "${target_dir}"
       cp -r helpers/ "${target_dir}/helpers"
 
   nodejs:
