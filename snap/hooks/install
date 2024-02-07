@@ -12,8 +12,8 @@ function create_file_structure () {
 
     # want to use the * here, so not calling dir_copy_if_not_exists
     # Doing it before OPENSEARCH_PATH_CERTS is created, as it is set as "snap_daemon" user
-    mkdir -p "${OPENSEARCH_PATH_CONF}/"
-    copy_files_between_folder "${SNAP}/etc/opensearch/" "${OPENSEARCH_PATH_CONF}/"
+    mkdir -p "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
+    copy_files_between_folder "${SNAP}/etc/opensearch/" "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
 
     declare -a folders=("${OPENSEARCH_HOME}" "${OPENSEARCH_VARLIB}" "${OPENSEARCH_VARLOG}" "${OPENSEARCH_TMPDIR}" "${OPENSEARCH_PATH_CERTS}")
     for f in "${folders[@]}"; do
@@ -26,31 +26,31 @@ function create_file_structure () {
         cp -r "${SNAP}/usr/share/opensearch/${dir}/"* "${SNAP_DATA}/usr/share/opensearch/${dir}/"
     done
 
-    add_folder "${OPENSEARCH_HOME}/extensions" 770
-    add_file "${OPENSEARCH_HOME}/extensions/extensions.yml" 660
-    add_file "${OPENSEARCH_PATH_CONF}/unicast_hosts.txt" 660
-    [ -d "/dev/shm/performanceanalyzer" ] || add_folder "/dev/shm/performanceanalyzer" 770
+    # add_folder "${OPENSEARCH_HOME}/extensions" 770
+    # add_file "${OPENSEARCH_HOME}/extensions/extensions.yml" 660
+    # add_file "${OPENSEARCH_DASHBOARDS_PATH_CONF}/unicast_hosts.txt" 660
+    # [ -d "/dev/shm/performanceanalyzer" ] || add_folder "/dev/shm/performanceanalyzer" 770
 }
 
 
 function set_base_config_props () {
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch_dashboards.yml" "path.data" "${OPENSEARCH_DASHBOARDS_VARLIB}"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch_dashboards.yml" "path.logs" "${OPENSEARCH_DASHBOARDS_VARLOG}"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch_dashboards.yml" "path.home" "${OPENSEARCH_DASHBOARDS_HOME}"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch_dashboards.yml" "path.data" "${OPENSEARCH_DASHBOARDS_VARLIB}"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch_dashboards.yml" "path.logs" "${OPENSEARCH_DASHBOARDS_VARLOG}"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch_dashboards.yml" "path.home" "${OPENSEARCH_DASHBOARDS_HOME}"
 
-    # replace_in_file "${OPENSEARCH_PATH_CONF}/jvm.options" "=logs/" "=${OPENSEARCH_VARLOG}/"
+    # replace_in_file "${OPENSEARCH_DASHBOARDS_PATH_CONF}/jvm.options" "=logs/" "=${OPENSEARCH_VARLOG}/"
 }
 
 
 function set_prometheus_exporter_config_props() {
-    set_yaml_prop "${OPENSEARCH_PATH_CONF}/opensearch.yml" "prometheus.metric_name.prefix" "opensearch_"
-    set_yaml_prop "${OPENSEARCH_PATH_CONF}/opensearch.yml" "prometheus.indices" "false"
-    set_yaml_prop "${OPENSEARCH_PATH_CONF}/opensearch.yml" "prometheus.cluster.settings" "false"
-    set_yaml_prop "${OPENSEARCH_PATH_CONF}/opensearch.yml" "prometheus.nodes.filter" "_local"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch.yml" "prometheus.metric_name.prefix" "opensearch_"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch.yml" "prometheus.indices" "false"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch.yml" "prometheus.cluster.settings" "false"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch.yml" "prometheus.nodes.filter" "_local"
 }
 
 
-# create_file_structure
+create_file_structure
 set_base_config_props
 # set_prometheus_exporter_config_props
 #
