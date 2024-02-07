@@ -34,9 +34,9 @@ function create_file_structure () {
 
 
 function set_base_config_props () {
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch-dashboards.yml" "path.data" "${OPENSEARCH_DASHBOARDS_VARLIB}"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch-dashboards.yml" "path.logs" "${OPENSEARCH_DASHBOARDS_VARLOG}"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch-dashboards.yml" "path.home" "${OPENSEARCH_DASHBOARDS_HOME}"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch_dashboards.yml" "path.data" "${OPENSEARCH_DASHBOARDS_VARLIB}"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch_dashboards.yml" "path.logs" "${OPENSEARCH_DASHBOARDS_VARLOG}"
+    set_yaml_prop "${OPENSEARCH_DASHBOARDS_CONFIG}/opensearch_dashboards.yml" "path.home" "${OPENSEARCH_DASHBOARDS_HOME}"
 
     # replace_in_file "${OPENSEARCH_PATH_CONF}/jvm.options" "=logs/" "=${OPENSEARCH_VARLOG}/"
 }
