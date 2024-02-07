@@ -44,9 +44,9 @@ environment:
   OPS_ROOT: ${SNAP_CURRENT}/opt/opensearch
 
 
-  OPENSEARCH_DASHBOARDS_HOME: ${SNAP_CURRENT}/usr/share/opensearch-dashboards
+  OPENSEARCH_DASHBOARDS_HOME: ${SNAP_DATA_CURRENT}/usr/share/opensearch-dashboards
   OPENSEARCH_DASHBOARDS_BIN: ${OPENSEARCH_DASHBOARDS_HOME}/bin
-  OPENSEARCH_DASHBOARDS_CONFIG: ${SNAP_CURRENT}/etc/opensearch-dashboards
+  OPENSEARCH_DASHBOARDS_PATH_CONF: ${OPENSEARCH_DASHBOARDS_HOME}/etc/opensearch-dashboards
 
   OPENSEARCH_DASHBOARDS_VARLOG: ${SNAP_COMMON}/var/log/opensearch-dashboards
   OPENSEARCH_DASHBOARDS_VARLIB: ${SNAP_COMMON}/var/lib/opensearch-dashboards
