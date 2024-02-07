@@ -112,7 +112,7 @@ parts:
 
   helper-scripts:
     plugin: nil
-    source: ./helpers
+    source: .
     source-type: local
     override-build: |
       target_dir="${CRAFT_PART_INSTALL}/opt/opensearch-dashboards"
