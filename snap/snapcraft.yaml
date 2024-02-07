@@ -109,7 +109,7 @@ parts:
       target_dir="${CRAFT_PART_INSTALL}/opt/opensearch-dashboards"
       mkdir -p "${target_dir}"
       cp -r wrappers/. "${target_dir}"
-      # cp -r helpers/ "${target_dir}/helpers"
+      cp -r helpers/ "${target_dir}/helpers"
 
   nodejs:
     plugin: nil
