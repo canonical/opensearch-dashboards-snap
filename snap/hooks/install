@@ -20,7 +20,7 @@ function create_file_structure () {
         add_folder "${f}" 770
     done
 
-    declare -a common=(modules plugins lib)
+    declare -a common=(lib)
     for dir in "${common[@]}"; do
         add_folder "${SNAP_DATA}/usr/share/opensearch-dashboards/${dir}" 770
         cp -r "${SNAP}/usr/share/opensearch-dashboards/${dir}/"* "${SNAP_DATA}/usr/share/opensearch-dashboards${dir}/"
