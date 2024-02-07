@@ -13,17 +13,17 @@ function create_file_structure () {
     # want to use the * here, so not calling dir_copy_if_not_exists
     # Doing it before OPENSEARCH_PATH_CERTS is created, as it is set as "snap_daemon" user
     mkdir -p "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
-    copy_files_between_folder "${SNAP}/etc/opensearch/" "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
+    copy_files_between_folder "${SNAP}/etc/opensearch-dashboards" "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
 
-    declare -a folders=("${OPENSEARCH_HOME}" "${OPENSEARCH_VARLIB}" "${OPENSEARCH_VARLOG}" "${OPENSEARCH_TMPDIR}" "${OPENSEARCH_PATH_CERTS}")
+    declare -a folders=("${OPENSEARCH_DASHBOARDS_HOME}" "${OPENSEARCH_DASHBOARDS_VARLIB}" "${OPENSEARCH_DASHBOARDS_VARLOG}" "${OPENSEARCH_DASHBOARDS_TMPDIR}" "${OPENSEARCH_DASHBOARDS_PATH_CERTS}")
     for f in "${folders[@]}"; do
         add_folder "${f}" 770
     done
 
     declare -a common=(modules plugins lib)
     for dir in "${common[@]}"; do
-        add_folder "${SNAP_DATA}/usr/share/opensearch/${dir}" 770
-        cp -r "${SNAP}/usr/share/opensearch/${dir}/"* "${SNAP_DATA}/usr/share/opensearch/${dir}/"
+        add_folder "${SNAP_DATA}/usr/share/opensearch-dashboards${dir}" 770
+        cp -r "${SNAP}/usr/share/opensearch-dashboards${dir}/"* "${SNAP_DATA}/usr/share/opensearch-dashboards${dir}/"
     done
 
     # add_folder "${OPENSEARCH_HOME}/extensions" 770
