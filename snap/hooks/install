@@ -22,8 +22,8 @@ function create_file_structure () {
 
     declare -a common=(modules plugins lib)
     for dir in "${common[@]}"; do
-        add_folder "${SNAP_DATA}/usr/share/opensearch-dashboards${dir}" 770
-        cp -r "${SNAP}/usr/share/opensearch-dashboards${dir}/"* "${SNAP_DATA}/usr/share/opensearch-dashboards${dir}/"
+        add_folder "${SNAP_DATA}/usr/share/opensearch-dashboards/${dir}" 770
+        cp -r "${SNAP}/usr/share/opensearch-dashboards/${dir}/"* "${SNAP_DATA}/usr/share/opensearch-dashboards${dir}/"
     done
 
     # add_folder "${OPENSEARCH_HOME}/extensions" 770
