@@ -50,6 +50,7 @@ environment:
 
   OPENSEARCH_DASHBOARDS_VARLOG: ${SNAP_COMMON}/var/log/opensearch-dashboards
   OPENSEARCH_DASHBOARDS_VARLIB: ${SNAP_COMMON}/var/lib/opensearch-dashboards
+  OPENSEARCH_DASHBOARDS_TMPDIR: ${SNAP_COMMON}/usr/share/tmp
 
   NODE_HOME: ${OPENSEARCH_DASHBOARDS_HOME}/node
 

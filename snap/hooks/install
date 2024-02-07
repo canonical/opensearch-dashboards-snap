@@ -15,7 +15,7 @@ function create_file_structure () {
     mkdir -p "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
     copy_files_between_folder "${SNAP}/etc/opensearch-dashboards" "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
 
-    declare -a folders=("${OPENSEARCH_DASHBOARDS_HOME}" "${OPENSEARCH_DASHBOARDS_VARLIB}" "${OPENSEARCH_DASHBOARDS_VARLOG}" "${OPENSEARCH_DASHBOARDS_TMPDIR}" "${OPENSEARCH_DASHBOARDS_PATH_CERTS}")
+    declare -a folders=("${OPENSEARCH_DASHBOARDS_HOME}" "${OPENSEARCH_DASHBOARDS_VARLIB}" "${OPENSEARCH_DASHBOARDS_VARLOG}" "${OPENSEARCH_DASHBOARDS_TMPDIR}")
     for f in "${folders[@]}"; do
         add_folder "${f}" 770
     done
