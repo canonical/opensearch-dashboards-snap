@@ -2,61 +2,16 @@
 
 set -eux
 
+mkdir -p "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
+cp -r "${SNAP}/etc/" "${SNAP_DATA_CURRENT}/"
 
-# source "${OPS_ROOT}"/helpers/snap-logger.sh "hook-install"
-source "${OPS_ROOT}"/helpers/io.sh
-source "${OPS_ROOT}"/helpers/set-conf.sh
+declare -a folders=("${OPENSEARCH_DASHBOARDS_HOME}" "${OPENSEARCH_DASHBOARDS_VARLIB}" "${OPENSEARCH_DASHBOARDS_VARLOG}" "${OPENSEARCH_DASHBOARDS_TMPDIR}")
+for f in "${folders[@]}"; do
+        mkdir -p $f
+done
 
+chmod -R 770 "${SNAP_DATA}"/*
+chmod -R 770 "${SNAP_COMMON}"/*
 
-function create_file_structure () {
-
-    # want to use the * here, so not calling dir_copy_if_not_exists
-    # Doing it before OPENSEARCH_PATH_CERTS is created, as it is set as "snap_daemon" user
-    mkdir -p "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
-    copy_files_between_folder "${SNAP}/etc/opensearch-dashboards" "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
-
-    declare -a folders=("${OPENSEARCH_DASHBOARDS_HOME}" "${OPENSEARCH_DASHBOARDS_VARLIB}" "${OPENSEARCH_DASHBOARDS_VARLOG}" "${OPENSEARCH_DASHBOARDS_TMPDIR}")
-    for f in "${folders[@]}"; do
-        add_folder "${f}" 770
-    done
-
-    declare -a common=(node)
-    for dir in "${common[@]}"; do
-        add_folder "${SNAP_DATA}/usr/share/opensearch-dashboards/${dir}" 770
-        cp -r "${SNAP}/usr/share/opensearch-dashboards/${dir}/"* "${SNAP_DATA}/usr/share/opensearch-dashboards/${dir}/"
-    done
-
-    # add_folder "${OPENSEARCH_HOME}/extensions" 770
-    # add_file "${OPENSEARCH_HOME}/extensions/extensions.yml" 660
-    # add_file "${OPENSEARCH_DASHBOARDS_PATH_CONF}/unicast_hosts.txt" 660
-    # [ -d "/dev/shm/performanceanalyzer" ] || add_folder "/dev/shm/performanceanalyzer" 770
-}
-
-
-function set_base_config_props () {
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch_dashboards.yml" "path.data" "${OPENSEARCH_DASHBOARDS_VARLIB}"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch_dashboards.yml" "path.logs" "${OPENSEARCH_DASHBOARDS_VARLOG}"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch_dashboards.yml" "path.home" "${OPENSEARCH_DASHBOARDS_HOME}"
-
-    # replace_in_file "${OPENSEARCH_DASHBOARDS_PATH_CONF}/jvm.options" "=logs/" "=${OPENSEARCH_VARLOG}/"
-}
-
-
-function set_prometheus_exporter_config_props() {
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch.yml" "prometheus.metric_name.prefix" "opensearch_"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch.yml" "prometheus.indices" "false"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch.yml" "prometheus.cluster.settings" "false"
-    set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch.yml" "prometheus.nodes.filter" "_local"
-}
-
-
-create_file_structure
-set_base_config_props
-# set_prometheus_exporter_config_props
-#
-# #  "${SNAP_COMMON}"
-# declare -a folders=("${SNAP_DATA}")
-# for f in "${folders[@]}"; do
-#     chown -R snap_daemon "${f}/"*
-#     chgrp root "${f}/"*
-# done
+chown -R snap_daemon "${SNAP_DATA}"/*
+chown -R snap_daemon "${SNAP_COMMON}"/*
