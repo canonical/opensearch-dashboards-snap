@@ -1,0 +1,50 @@
+name: Build OpenSearch Dashboard from source, run tests and release.
+
+env:
+  RELEASE: edge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci-tests:
+    name: Build and Run Tests
+    uses: ./.github/workflows/ci.yaml
+
+  publish:
+    name: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs:
+      - ci-tests
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install required dependencies
+        run: |
+          sudo snap install yq
+
+      - name: Download snap file
+        uses: actions/download-artifact@v3
+        with:
+          name: opensearch-dashboards_snap_amd64
+          path: .
+
+      - name: Set snap release channel
+        run: |
+          version="$(cat snap/snapcraft.yaml | yq .version)"
+          channel="${version%%.*}/${{env.RELEASE}}"
+          
+          echo "version=${version}" >> $GITHUB_ENV
+          echo "channel=${channel}" >> $GITHUB_ENV
+
+      - name: Publish snap to Store
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: opensearch-dashboards_${{env.version}}_amd64.snap
+          release: ${{env.channel}}
