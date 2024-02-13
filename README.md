@@ -23,21 +23,28 @@ sudo snap install opensearch-dashboards --channel=2/edge
 
 ### Starting OpenSearch Dashboards:
 
-#### Starting OpenSearch:
-```
-sudo snap start opensearch-dashboards
-```
-Additional parameters may be set in the shape of snap settings, such as:
-```
-    sudo snap set opensearch-dashboards port=1234
-```
-The list of parameters is:
+#### Parameters:
+
+The following parameters are configurable for the `opensearch-dashboard` daemon:
 
  - `host` -- hostname or IP where the service is to be exposed (default: `localhost`)
  - `port` -- port where the service is to be exposed (default: `5601`)
  - `opensearch` -- OpenSearch instance URI to connect to (default: `https://localhost:9200`)
 
-### Testing the OpenSearch setup:
+They can be set using the `snapctl` command, before starting the application. Such as:
+```
+sudo snap set opensearch-dashboards port=1234
+```
+
+#### Starting up the service:
+
+Either if using the defautls (or when all parameters are set), `opensearch-dashboards` can be started
+by executing the following command
+```
+sudo snap start opensearch-dashboards.daemon
+```
+
+### Testing the OpenSearch Dashboards setup:
 
 Opensearch Dashboards by default are started up at http://localhost:5601, with default credentials
 (user: `kibanaserver`, password: `kibanaserver`).
@@ -48,7 +55,7 @@ should be able to automatically connect.
 Any other potential connection (or other configuration information) should go to
 
 ```
- /snap/opensearch-dashboards/current/etc/opensearch-dashboards/opensearch_dashboards.yml
+/snap/opensearch-dashboards/current/etc/opensearch-dashboards/opensearch_dashboards.yml
 ```
 
 ## License
