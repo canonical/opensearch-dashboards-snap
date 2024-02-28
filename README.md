@@ -1,4 +1,7 @@
 # OpenSearch Dasboards Snap
+[![Release](https://github.com/canonical/opensearch-dashboards-snap/actions/workflows/release.yaml/badge.svg)](https://github.com/canonical/opensearch-dashboards-snap/actions/workflows/release.yaml)
+[![Tests](https://github.com/canonical/opensearch-dashboards-snap/actions/workflows/ci.yaml/badge.svg)](https://github.com/canonical/opensearch-dashboards-snap/actions/workflows/ci.yaml)
+
 
 [//]: # (<h1 align="center">)
 [//]: # (  <a href="https://opensearch.org/">)
