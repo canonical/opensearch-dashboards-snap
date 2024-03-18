@@ -1,7 +1,7 @@
 name: opensearch-dashboards
 base: core22
 
-version: '2.10.0'
+version: '2.11.1'
 
 summary: 'OpenSearch Dashboards: community-driven OpenSearch visualization suite.'
 description: |
