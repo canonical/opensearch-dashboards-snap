@@ -70,7 +70,7 @@ jobs:
 
       - name: Setup the required system configs OpenSearch
         run: |
-          sudo snap install opensearch --channel=2/edge --revision=39
+          sudo snap install opensearch --channel=2/edge --revision=40
           sudo snap connect opensearch:process-control
 
           sudo sysctl -w vm.swappiness=0
@@ -101,7 +101,7 @@ jobs:
           sudo snap start opensearch.daemon
 
           # wait a bit for it to fully initialize
-          sleep 15s
+          sleep 60s
 
           # create the security index
           sudo snap run opensearch.security-init --tls-priv-key-admin-pass=admin1234
