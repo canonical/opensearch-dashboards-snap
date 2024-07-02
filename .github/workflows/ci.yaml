@@ -6,51 +6,56 @@ concurrency:
 
 on:
   workflow_call:
+    outputs:
+      artifact-prefix:
+          description: The Opensearch Dashboards snap package is uploaded to GitHub artifacts beginning with this prefix
+          value: ${{ jobs.build.outputs.artifact-prefix }}
   pull_request:
 
 jobs:
   build:
     name: Build Snap
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    outputs:
-      snap-file: ${{ steps.build-snap.outputs.snap }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Install required dependencies
-        run: |
-          sudo snap install yq
-
-      - name: Upgrade linux deps
-        run: |
-          sudo apt-get update
-          
-          # install security updates
-          sudo apt-get -s dist-upgrade \
-            | grep "^Inst" \
-            | grep -i securi \
-            | awk -F " " {'print $2'} \
-            | xargs sudo apt-get install -y
-          
-          sudo apt-get autoremove -y
-          sudo apt-get clean -y
-          sudo snap refresh snapd
-
-      - id: build-snap
-        name: Build snap
-        uses: snapcore/action-build@v1
-        with:
-          snapcraft-channel: 7.x/candidate
-
-      - name: Upload built snap job artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: opensearch-dashboards_snap_amd64
-          path: "opensearch-dashboards_*.snap"
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v12.6.0
+    # runs-on: ubuntu-latest
+    # timeout-minutes: 60
+    # outputs:
+    #   snap-file: ${{ steps.build-snap.outputs.snap }}
+    # steps:
+    #   - name: Checkout repo
+    #     uses: actions/checkout@v3
+    #     with:
+    #       fetch-depth: 0
+    #
+    #   - name: Install required dependencies
+    #     run: |
+    #       sudo snap install yq
+    #
+    #   - name: Upgrade linux deps
+    #     run: |
+    #       sudo apt-get update
+    #       
+    #       # install security updates
+    #       sudo apt-get -s dist-upgrade \
+    #         | grep "^Inst" \
+    #         | grep -i securi \
+    #         | awk -F " " {'print $2'} \
+    #         | xargs sudo apt-get install -y
+    #       
+    #       sudo apt-get autoremove -y
+    #       sudo apt-get clean -y
+    #       sudo snap refresh snapd
+    #
+    #   - id: build-snap
+    #     name: Build snap
+    #     uses: snapcore/action-build@v1
+    #     with:
+    #       snapcraft-channel: 7.x/candidate
+    #
+    #   - name: Upload built snap job artifact
+    #     uses: actions/upload-artifact@v3
+    #     with:
+    #       name: opensearch-dashboards_snap_amd64
+    #       path: "opensearch-dashboards_*.snap"
 
   test:
     name: Test Snap
@@ -107,14 +112,16 @@ jobs:
           sudo snap run opensearch.security-init --tls-priv-key-admin-pass=admin1234
 
       - name: Download snap file for OpenSearch Dashboards
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: opensearch-dashboards_snap_amd64
+          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
           path: .
+          merge-multiple: true
 
       - name: Install snap file for Opensearch Dashboards
         run: |
           version="$(yq .version < snap/snapcraft.yaml)"
+          ls -R
           
           sudo snap install opensearch-dashboards_${version}_amd64.snap --dangerous --jailmode
 

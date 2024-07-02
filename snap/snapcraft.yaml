@@ -14,7 +14,7 @@ grade: stable
 confinement: strict
 
 architectures:
-  - build-on: amd64
+  - build-on: [amd64]
 
 
 system-usernames:
