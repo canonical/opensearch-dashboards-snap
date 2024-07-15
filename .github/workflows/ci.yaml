@@ -164,3 +164,19 @@ jobs:
             echo "ERROR: Logfile unaccessible. Aborting..." >&2
             exit 1
           fi
+
+      - name: Test Prometheus Exporter
+        run: |
+          URL=http://localhost:9684/metrics
+
+          # Wait until the service esteblishes
+          exporter_ok=$(curl -i ${URL} \
+            --connect-timeout 5 \
+            --retry 5 \
+            --retry-delay 5 \
+            --retry-max-time 60 \
+            --retry-connrefused  | grep "200 OK")
+          if [ ! "$exporter_ok" ]; then
+            echo "ERROR: Prometheus exporter unavailable. Aborting..." >&2
+            exit 1
+          fi

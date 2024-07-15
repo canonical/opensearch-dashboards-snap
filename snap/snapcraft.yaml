@@ -17,6 +17,17 @@ architectures:
   - build-on: amd64
 
 
+package-repositories:
+  - type: apt
+    components: [main]
+    suites: [jammy]
+    # key-id: 6676E3F1A76ADBE4488944BF7D1A96D4BF78C79E
+    # url: https://ppa.launchpadcontent.net/data-platform/prometheus-kibana-exporter/ubuntu
+    # Temoorary solution,soon to be switched to the above
+    key-id: DF1E9DB3451282198C6BED4D2D3ED538C4441E6D
+    url: https://ppa.launchpadcontent.net/lvoytek/dp-prometheus-kibana-exporter/ubuntu
+
+
 system-usernames:
   snap_daemon: shared
 
@@ -36,13 +47,14 @@ environment:
 
   SNAP_LOG_DIR: ${SNAP_COMMON}/ops/snap/logs
 
-  OPS_ROOT: ${SNAP_CURRENT}/opt/opensearch
+  OPS_ROOT: ${SNAP_CURRENT}/opt/opensearch-dashboards
 
 
   # Read-only spaces -- executables
 
   OPENSEARCH_DASHBOARDS_RO_HOME: ${SNAP_CURRENT}/usr/share/opensearch-dashboards
   OPENSEARCH_DASHBOARDS_BIN: ${OPENSEARCH_DASHBOARDS_RO_HOME}/bin
+  OPENSEARCH_DASHBOARDS_DEPS_BIN: ${SNAP_CURRENT}/usr/bin
   NODE_HOME: ${OPENSEARCH_DASHBOARDS_RO_HOME}/node
 
   # Read-write spaces
@@ -56,7 +68,7 @@ environment:
 
 
 apps:
-  daemon:
+  opensearch-dashboards-daemon:
     daemon: simple
     install-mode: disable
     command: opt/opensearch-dashboards/start.sh
@@ -66,6 +78,17 @@ apps:
       - network
       - network-bind
 
+  kibana-exporter-daemon:
+    daemon: simple
+    install-mode: disable
+    command: opt/opensearch-dashboards/start-exporter.sh
+    restart-condition: always
+    restart-delay: 20s
+    plugs:
+      - network
+      - network-bind
+
+
 parts:
   dependencies:
     plugin: nil
@@ -74,6 +97,7 @@ parts:
     stage-packages:
       - util-linux
       - curl
+      - prometheus-kibana-exporter
 
   wrapper-scripts:
     plugin: nil
@@ -112,7 +136,7 @@ parts:
       curl  -L -o "${archive}" "${url}"
 
       # Extract and arrange
-      tar -xzvf "${archive}" -C "${CRAFT_PART_INSTALL}/" --strip-components=1
+      tar -xzf "${archive}" -C "${CRAFT_PART_INSTALL}/" --strip-components=1
 
       mkdir -p "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards"
 
