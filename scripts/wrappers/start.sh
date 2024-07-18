@@ -4,7 +4,7 @@ set -eu
 
 function start_opensearch_dashboards () {
     # start
-    "${SNAP}"/usr/bin/setpriv \
+    exec "${SNAP}"/usr/bin/setpriv \
         --clear-groups \
         --reuid snap_daemon \
         --regid snap_daemon -- \
