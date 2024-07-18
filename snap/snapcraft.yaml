@@ -32,6 +32,13 @@ system-usernames:
   snap_daemon: shared
 
 
+slots:
+  logs:
+    interface: content
+    source:
+      read:
+        - ${SNAP_COMMON}/var/log/opensearch-dashboards
+
 hooks:
   install:
     plugs:
