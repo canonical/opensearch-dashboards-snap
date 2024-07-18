@@ -90,7 +90,7 @@ apps:
     install-mode: disable
     command: opt/opensearch-dashboards/start-exporter.sh
     restart-condition: always
-    restart-delay: 20s
+    restart-delay: 5s
     plugs:
       - network
       - network-bind
