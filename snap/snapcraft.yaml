@@ -37,7 +37,7 @@ slots:
     interface: content
     source:
       read:
-        - ${SNAP_COMMON}/var/log/opensearch-dashboards
+        - $SNAP_COMMON/var/log/opensearch-dashboards
 
 hooks:
   install:
