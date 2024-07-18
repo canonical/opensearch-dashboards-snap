@@ -180,3 +180,12 @@ jobs:
             echo "ERROR: Prometheus exporter unavailable. Aborting..." >&2
             exit 1
           fi
+
+      - name: Test Logs slot
+        run: |
+          logs_slot_avail=$(sudo snap connections opensearch-dashboards | grep opensearch-dashboards:logs)
+
+          if [ ! "$logs_slot_avail" ]; then
+            echo "ERROR: Logs slot is not available. Aborting..." >&2
+            exit 1
+          fi
