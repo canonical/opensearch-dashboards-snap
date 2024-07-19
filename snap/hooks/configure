@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eux
+
+scheme=$(snapctl get scheme)
+if [ -z "${scheme}" ] || [ "${scheme}" != "https" ]; then
+    scheme="http"
+fi
+snapctl set scheme="${scheme}"
