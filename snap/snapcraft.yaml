@@ -21,11 +21,8 @@ package-repositories:
   - type: apt
     components: [main]
     suites: [jammy]
-    # key-id: 6676E3F1A76ADBE4488944BF7D1A96D4BF78C79E
-    # url: https://ppa.launchpadcontent.net/data-platform/prometheus-kibana-exporter/ubuntu
-    # Temoorary solution,soon to be switched to the above
-    key-id: DF1E9DB3451282198C6BED4D2D3ED538C4441E6D
-    url: https://ppa.launchpadcontent.net/lvoytek/dp-prometheus-kibana-exporter/ubuntu
+    key-id: 6676E3F1A76ADBE4488944BF7D1A96D4BF78C79E
+    url: https://ppa.launchpadcontent.net/data-platform/prometheus-kibana-exporter/ubuntu
 
 
 system-usernames:

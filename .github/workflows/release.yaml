@@ -16,7 +16,7 @@ jobs:
   publish:
     name: publish
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 60
     needs:
       - ci-tests
     steps:
