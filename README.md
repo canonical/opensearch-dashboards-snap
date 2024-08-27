@@ -58,7 +58,7 @@ should be able to automatically connect.
 Any other potential connection (or other configuration information) should go to
 
 ```
-/snap/wazuh-dashboard/current/etc/wazuh-dashboard/opensearch_dashboards.yml
+/snap/wazuh-dashboard/current/etc/opensearch/opensearch_dashboards.yml
 ```
 
 ## License
