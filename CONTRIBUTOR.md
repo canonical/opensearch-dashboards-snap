@@ -1,13 +1,13 @@
 ## Developer Guide:
 
 
-### Set up opensearch
+### Set up wazuh-indexer
 
-We recommend to install the opensearch snap, so that wazuh-dashboard
-has an opensearch instance to connect to.
+We recommend to install the wazuh-indexer snap, so that wazuh-dashboard
+has an wazuh-indexer instance to connect to.
 
-Instructions to get the opensearch snap working are detailed on the OpenSearch Snap
-[Github repository](https://github.com/canonical/opensearch-snap)
+Instructions to get the wazuh-indexer snap working are detailed on the Wazuh Indexer Snap
+[Github repository](https://github.com/canonical/wazuh-indexer-snap)
 
 
 ### Installation:
@@ -27,12 +27,12 @@ sudo snap install ./wazuh-dashboard_2.12.0_amd64.snap --dangerous --jailmode
 ## Start wazuh-dashboard
 
 As explained in the 
-[README: Starting OpenSearch Dashboards](https://github.com/canonical/wazuh-dashboard-snap?tab=readme-ov-file#starting-wazuh-dashboard)
+[README: Starting Wazuh Dashboard](https://github.com/canonical/wazuh-dashboard-snap?tab=readme-ov-file#starting-wazuh-dashboard)
 
 ### Test your installation:
 
 As explained in the
-[README: Testing the OpenSearch Dashboards setup](https://github.com/canonical/wazuh-dashboard-snap?tab=readme-ov-file#testing-the-wazuh-dashboard-setup)
+[README: Testing the Wazuh Dashboard setup](https://github.com/canonical/wazuh-dashboard-snap?tab=readme-ov-file#testing-the-wazuh-dashboard-setup)
 
 ### For live debugging:
 1. The journal logs:

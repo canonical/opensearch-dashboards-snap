@@ -106,19 +106,19 @@ jobs:
           # create the security index
           sudo snap run opensearch.security-init --tls-priv-key-admin-pass=admin1234
 
-      - name: Download snap file for OpenSearch Dashboards
+      - name: Download snap file for Wazuh Dashboard
         uses: actions/download-artifact@v3
         with:
           name: wazuh-dashboard_snap_amd64
           path: .
 
-      - name: Install snap file for Opensearch Dashboards
+      - name: Install snap file for Wazuh Dashboard
         run: |
           version="$(yq .version < snap/snapcraft.yaml)"
           
           sudo snap install wazuh-dashboard_${version}_amd64.snap --dangerous --jailmode
 
-      - name: Test Opensearch Dashboards
+      - name: Test Wazuh Dashboard
         run: |
           sudo snap start wazuh-dashboard
 
