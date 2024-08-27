@@ -1,21 +1,20 @@
-name: opensearch-dashboards
-base: core22
+name: wazuh-dashboard
+base: core24
 
-version: '2.14.0'
+version: '4.8.2'
 
-summary: 'OpenSearch Dashboards: community-driven OpenSearch visualization suite.'
+summary: OpenSearch Dashboards with additional changes for easier use along Wazuh.
 description: |
-    OpenSearch Dashboard is a community-driven, Apache 2.0-licensed open source 
-    user interface that lets you visualize your OpenSearch data and run and scale
-    your OpenSearch clusters.
+    Wazuh Dashboard is a community-driven, Apache 2.0-licensed open source 
+    user interface that lets you visualize your Wazuh data and run and scale
+    your Wazuh clusters.
 
 grade: stable
 
 confinement: strict
 
-architectures:
-  - build-on: amd64
-
+platforms:
+  amd64:
 
 package-repositories:
   - type: apt
@@ -23,7 +22,13 @@ package-repositories:
     suites: [jammy]
     key-id: 6676E3F1A76ADBE4488944BF7D1A96D4BF78C79E
     url: https://ppa.launchpadcontent.net/data-platform/prometheus-kibana-exporter/ubuntu
-
+# TODO: build from sources
+  - type: apt
+    components: [main]
+    suites: [stable]
+    key-id: 0DCFCA5547B19D2A6099506096B3EE5F29111145
+    key-server: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+    url: https://packages.wazuh.com/4.x/apt/
 
 system-usernames:
   snap_daemon: shared
@@ -126,35 +131,10 @@ parts:
     override-build: |
       snap install node --channel=18/stable --classic
 
-  opensearch-dashboards:
-    plugin: npm
-    npm-include-node: true
-    npm-node-version: 18.16.0
-    source: .
-    override-build: |
-      version="$(craftctl get version)"
-      archive="opensearch-dashboards-${version}-linux-x64.tar.gz"
-
-      # Download Opensearch Dashboards
-      url="https://artifacts.opensearch.org/releases/bundle/opensearch-dashboards/${version}/${archive}"
-      curl  -L -o "${archive}" "${url}"
-
-      # Extract and arrange
-      tar -xzf "${archive}" -C "${CRAFT_PART_INSTALL}/" --strip-components=1
-
-      mkdir -p "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards"
-
-      mkdir -p "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
-      mv "${CRAFT_PART_INSTALL}"/config/* "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
-
-      declare -a resources=(
-        assets  bin  data  manifest.yml  node  node_modules  package.json  plugins  src LICENSE.txt  NOTICE.txt  README.txt
-      )
-
-      for res in "${resources[@]}"; do
-          mv "${CRAFT_PART_INSTALL}/${res}" "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/"
-      done
-      chmod -R 755 "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/bin"
-
-      # Final clean-up
-      rm "${archive}"
+  wazuh-dashboard:
+    plugin: nil
+    build-packages:
+       - apt-transport-https
+       - gnupg
+    stage-packages:
+       - wazuh-dashboard
