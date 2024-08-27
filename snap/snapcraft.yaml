@@ -51,8 +51,8 @@ hooks:
 
 
 environment:
-  SNAP_CURRENT: /snap/opensearch-dashboards/current
-  SNAP_DATA_CURRENT: /var/snap/opensearch-dashboards/current
+  SNAP_CURRENT: /snap/wazuh-dashboard/current
+  SNAP_DATA_CURRENT: /var/snap/wazuh-dashboard/current
 
   SNAP_LOG_DIR: ${SNAP_COMMON}/ops/snap/logs
 
