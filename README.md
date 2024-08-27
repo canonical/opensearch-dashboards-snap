@@ -4,7 +4,7 @@
 
 
 [//]: # (<h1 align="center">)
-[//]: # (  <a href="https://wazuh.com//">)
+[//]: # (  <a href="https://wazuh.com/">)
 [//]: # (    <img src="https://wazuh.com/uploads/2022/05/WAZUH.png" alt="Wazuh" />)
 [//]: # (  </a>)
 [//]: # (  <br />)
