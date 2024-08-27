@@ -141,4 +141,4 @@ parts:
     override-stage: |
       craftctl default
       mkdir -p etc/opensearch-dashboards
-      ln -s etc/opensearch-dashboards.yml etc/opensearch-dashboards/opensearch-dashboards.yml
+      cp etc/opensearch-dashboards.yml etc/opensearch-dashboards/opensearch-dashboards.yml
