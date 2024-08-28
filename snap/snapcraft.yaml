@@ -87,15 +87,15 @@ apps:
       - network
       - network-bind
 
-  kibana-exporter-daemon:
-    daemon: simple
-    install-mode: disable
-    command: opt/opensearch-dashboards/start-exporter.sh
-    restart-condition: always
-    restart-delay: 5s
-    plugs:
-      - network
-      - network-bind
+  # kibana-exporter-daemon:
+  #   daemon: simple
+  #   install-mode: disable
+  #   command: opt/opensearch-dashboards/start-exporter.sh
+  #   restart-condition: always
+  #   restart-delay: 5s
+  #   plugs:
+  #     - network
+  #     - network-bind
 
 
 parts:
@@ -134,7 +134,10 @@ parts:
   wazuh-dashboard:
     plugin: nil
     build-packages:
-       - apt-transport-https
-       - gnupg
+      - apt-transport-https
+      - gnupg
     stage-packages:
-       - wazuh-dashboard
+      - wazuh-dashboard
+    override-stage: |
+      craftctl default
+      chmod -R 755 usr/share/wazuh-dashboard/bin
