@@ -140,4 +140,4 @@ parts:
       - wazuh-dashboard
     override-stage: |
       craftctl default
-      chmod -R 755 usr/share/wazuh-dashboard/bin
+      chmod -R 755 usr/share/wazuh-dashboard
