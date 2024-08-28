@@ -10,6 +10,8 @@ source "${OPS_ROOT}"/helpers/set-conf.sh
 set -eux
 
 function create_file_structure () {
+    find /var/snap/wazuh-dashboard/current/ -type f
+    echo $PWD
     mkdir -p "${OPENSEARCH_DASHBOARDS_PATH_CONF}/"
     cp -r "${SNAP}/etc/" "${SNAP_DATA_CURRENT}/"
 
@@ -21,6 +23,7 @@ function create_file_structure () {
 
 
 function set_base_config_props () {
+    ls -la /var/snap/wazuh-dashboard/current/etc/*
     set_yaml_prop "${OPENSEARCH_DASHBOARDS_PATH_CONF}/opensearch_dashboards.yml" "path.data" "${OPENSEARCH_DASHBOARDS_VARLIB}"
 }
 

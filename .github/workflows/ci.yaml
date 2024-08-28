@@ -159,7 +159,7 @@ jobs:
           fi
 
           # Check if logs are collected as expected
-          logfile="/var/snap/wazuh-dashboard/common/var/log/opensearch-dashboards/opensearch_dashboards.log"
+          logfile="/var/snap/wazuh-dashboard/common/var/log/wazuh-dashboard/opensearch_dashboards.log"
           if ! sudo test -s "${logfile}"; then
             echo "ERROR: Logfile unaccessible. Aborting..." >&2
             exit 1
