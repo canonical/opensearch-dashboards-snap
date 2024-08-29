@@ -154,6 +154,7 @@ parts:
       # Use this setting if you are running opensearch-dashboards without https
       opensearch_security.cookie.secure: false
       EOT
-
+    override-prime: |
+      craftctl default
       usr/share/wazuh-dashboard/bin/opensearch-dashboards-plugin install --allow-root anomalyDetectionDashboards
       chmod -R 755 usr/share/wazuh-dashboard
