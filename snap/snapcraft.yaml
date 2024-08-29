@@ -3,7 +3,7 @@ base: core24
 
 version: '4.8.2'
 
-summary: OpenSearch Dashboards with additional changes for easier use along Wazuh.
+summary: OpenSearch Dashboards with additional changes for easier use alongside Wazuh.
 description: |
     Wazuh Dashboard is a community-driven, Apache 2.0-licensed open source 
     user interface that lets you visualize your Wazuh data and run and scale
