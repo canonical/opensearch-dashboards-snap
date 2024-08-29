@@ -44,13 +44,13 @@ jobs:
         name: Build snap
         uses: snapcore/action-build@v1
         with:
-          snapcraft-channel: 7.x/candidate
+          snapcraft-channel: 8.x/stable
 
       - name: Upload built snap job artifact
         uses: actions/upload-artifact@v3
         with:
-          name: opensearch-dashboards_snap_amd64
-          path: "opensearch-dashboards_*.snap"
+          name: wazuh-dashboard_snap_amd64
+          path: "wazuh-dashboard_*.snap"
 
   test:
     name: Test Snap
@@ -106,21 +106,21 @@ jobs:
           # create the security index
           sudo snap run opensearch.security-init --tls-priv-key-admin-pass=admin1234
 
-      - name: Download snap file for OpenSearch Dashboards
+      - name: Download snap file for Wazuh Dashboard
         uses: actions/download-artifact@v3
         with:
-          name: opensearch-dashboards_snap_amd64
+          name: wazuh-dashboard_snap_amd64
           path: .
 
-      - name: Install snap file for Opensearch Dashboards
+      - name: Install snap file for Wazuh Dashboard
         run: |
           version="$(yq .version < snap/snapcraft.yaml)"
           
-          sudo snap install opensearch-dashboards_${version}_amd64.snap --dangerous --jailmode
+          sudo snap install wazuh-dashboard_${version}_amd64.snap --dangerous --jailmode
 
-      - name: Test Opensearch Dashboards
+      - name: Test Wazuh Dashboard
         run: |
-          sudo snap start opensearch-dashboards
+          sudo snap start wazuh-dashboard
 
           # Wait until the service esteblishes
           service_unavailable=$(curl -i http://localhost:5601 \
@@ -159,7 +159,7 @@ jobs:
           fi
 
           # Check if logs are collected as expected
-          logfile="/var/snap/opensearch-dashboards/common/var/log/opensearch-dashboards/opensearch_dashboards.log"
+          logfile="/var/snap/wazuh-dashboard/common/var/log/wazuh-dashboard/opensearch_dashboards.log"
           if ! sudo test -s "${logfile}"; then
             echo "ERROR: Logfile unaccessible. Aborting..." >&2
             exit 1
@@ -183,8 +183,8 @@ jobs:
 
           echo "Successfully connected to the Exporter service"
 
-          sudo snap set opensearch-dashboards scheme=https
-          sudo snap restart opensearch-dashboards
+          sudo snap set wazuh-dashboard scheme=https
+          sudo snap restart wazuh-dashboard
           sleep 10 
 
           # Wait until the service esteblishes
@@ -202,8 +202,8 @@ jobs:
           echo "Exporter was down when it was supposed to be"
 
           # Wrong setting defaults to HTTP
-          sudo snap set opensearch-dashboards scheme=httpblabla
-          sudo snap restart opensearch-dashboards
+          sudo snap set wazuh-dashboard scheme=httpblabla
+          sudo snap restart wazuh-dashboard
           sleep 10
 
           # Wait until the service esteblishes
@@ -222,7 +222,7 @@ jobs:
 
       - name: Test Logs slot
         run: |
-          logs_slot_avail=$(sudo snap connections opensearch-dashboards | grep opensearch-dashboards:logs)
+          logs_slot_avail=$(sudo snap connections wazuh-dashboard | grep wazuh-dashboard:logs)
 
           if [ ! "$logs_slot_avail" ]; then
             echo "ERROR: Logs slot is not available. Aborting..." >&2

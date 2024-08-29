@@ -1,21 +1,20 @@
-name: opensearch-dashboards
-base: core22
+name: wazuh-dashboard
+base: core24
 
-version: '2.14.0'
+version: '4.8.2'
 
-summary: 'OpenSearch Dashboards: community-driven OpenSearch visualization suite.'
+summary: OpenSearch Dashboards with additional changes for easier use alongside Wazuh.
 description: |
-    OpenSearch Dashboard is a community-driven, Apache 2.0-licensed open source 
-    user interface that lets you visualize your OpenSearch data and run and scale
-    your OpenSearch clusters.
+    Wazuh Dashboard is a community-driven, Apache 2.0-licensed open source 
+    user interface that lets you visualize your Wazuh data and run and scale
+    your Wazuh clusters.
 
 grade: stable
 
 confinement: strict
 
-architectures:
-  - build-on: amd64
-
+platforms:
+  amd64:
 
 package-repositories:
   - type: apt
@@ -23,7 +22,13 @@ package-repositories:
     suites: [jammy]
     key-id: 6676E3F1A76ADBE4488944BF7D1A96D4BF78C79E
     url: https://ppa.launchpadcontent.net/data-platform/prometheus-kibana-exporter/ubuntu
-
+# TODO: build from sources
+  - type: apt
+    components: [main]
+    suites: [stable]
+    key-id: 0DCFCA5547B19D2A6099506096B3EE5F29111145
+    key-server: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+    url: https://packages.wazuh.com/4.x/apt/
 
 system-usernames:
   snap_daemon: shared
@@ -34,7 +39,7 @@ slots:
     interface: content
     source:
       read:
-        - $SNAP_COMMON/var/log/opensearch-dashboards
+        - $SNAP_COMMON/var/log/wazuh-dashboard
 
 hooks:
   install:
@@ -46,8 +51,8 @@ hooks:
 
 
 environment:
-  SNAP_CURRENT: /snap/opensearch-dashboards/current
-  SNAP_DATA_CURRENT: /var/snap/opensearch-dashboards/current
+  SNAP_CURRENT: /snap/wazuh-dashboard/current
+  SNAP_DATA_CURRENT: /var/snap/wazuh-dashboard/current
 
   SNAP_LOG_DIR: ${SNAP_COMMON}/ops/snap/logs
 
@@ -56,18 +61,18 @@ environment:
 
   # Read-only spaces -- executables
 
-  OPENSEARCH_DASHBOARDS_RO_HOME: ${SNAP_CURRENT}/usr/share/opensearch-dashboards
+  OPENSEARCH_DASHBOARDS_RO_HOME: ${SNAP_CURRENT}/usr/share/wazuh-dashboard
   OPENSEARCH_DASHBOARDS_BIN: ${OPENSEARCH_DASHBOARDS_RO_HOME}/bin
   OPENSEARCH_DASHBOARDS_DEPS_BIN: ${SNAP_CURRENT}/usr/bin
   NODE_HOME: ${OPENSEARCH_DASHBOARDS_RO_HOME}/node
 
   # Read-write spaces
 
-  OPENSEARCH_DASHBOARDS_RW_HOME: ${SNAP_DATA_CURRENT}/usr/share/opensearch-dashboards
-  OPENSEARCH_DASHBOARDS_PATH_CONF: ${SNAP_DATA_CURRENT}/etc/opensearch-dashboards
+  OPENSEARCH_DASHBOARDS_RW_HOME: ${SNAP_DATA_CURRENT}/usr/share/wazuh-dashboard
+  OPENSEARCH_DASHBOARDS_PATH_CONF: ${SNAP_DATA_CURRENT}/etc/wazuh-dashboard
 
-  OPENSEARCH_DASHBOARDS_VARLOG: ${SNAP_COMMON}/var/log/opensearch-dashboards
-  OPENSEARCH_DASHBOARDS_VARLIB: ${SNAP_COMMON}/var/lib/opensearch-dashboards
+  OPENSEARCH_DASHBOARDS_VARLOG: ${SNAP_COMMON}/var/log/wazuh-dashboard
+  OPENSEARCH_DASHBOARDS_VARLIB: ${SNAP_COMMON}/var/lib/wazuh-dashboard
   OPENSEARCH_DASHBOARDS_TMPDIR: ${SNAP_COMMON}/usr/share/tmp
 
 
@@ -126,35 +131,30 @@ parts:
     override-build: |
       snap install node --channel=18/stable --classic
 
-  opensearch-dashboards:
-    plugin: npm
-    npm-include-node: true
-    npm-node-version: 18.16.0
-    source: .
-    override-build: |
-      version="$(craftctl get version)"
-      archive="opensearch-dashboards-${version}-linux-x64.tar.gz"
+  wazuh-dashboard:
+    plugin: nil
+    build-packages:
+      - apt-transport-https
+      - gnupg
+    stage-packages:
+      - wazuh-dashboard
+    override-stage: |
+      craftctl default
+      sed -i -e 's/^\([^#].*\)/# \1/g' etc/wazuh-dashboard/opensearch_dashboards.yml
+      cat <<EOT >> etc/wazuh-dashboard/opensearch_dashboards.yml
+      opensearch.hosts: [https://localhost:9200]
+      opensearch.ssl.verificationMode: none
+      opensearch.username: kibanaserver
+      opensearch.password: kibanaserver
+      opensearch.requestHeadersWhitelist: [authorization, securitytenant]
 
-      # Download Opensearch Dashboards
-      url="https://artifacts.opensearch.org/releases/bundle/opensearch-dashboards/${version}/${archive}"
-      curl  -L -o "${archive}" "${url}"
-
-      # Extract and arrange
-      tar -xzf "${archive}" -C "${CRAFT_PART_INSTALL}/" --strip-components=1
-
-      mkdir -p "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards"
-
-      mkdir -p "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
-      mv "${CRAFT_PART_INSTALL}"/config/* "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
-
-      declare -a resources=(
-        assets  bin  data  manifest.yml  node  node_modules  package.json  plugins  src LICENSE.txt  NOTICE.txt  README.txt
-      )
-
-      for res in "${resources[@]}"; do
-          mv "${CRAFT_PART_INSTALL}/${res}" "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/"
-      done
-      chmod -R 755 "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/bin"
-
-      # Final clean-up
-      rm "${archive}"
+      opensearch_security.multitenancy.enabled: true
+      opensearch_security.multitenancy.tenants.preferred: [Private, Global]
+      opensearch_security.readonly_mode.roles: [kibana_read_only]
+      # Use this setting if you are running opensearch-dashboards without https
+      opensearch_security.cookie.secure: false
+      EOT
+    override-prime: |
+      craftctl default
+      usr/share/wazuh-dashboard/bin/opensearch-dashboards-plugin install --allow-root anomalyDetectionDashboards
+      chmod -R 755 usr/share/wazuh-dashboard
