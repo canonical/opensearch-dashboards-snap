@@ -155,5 +155,7 @@ parts:
       opensearch_security.cookie.secure: false
       EOT
 
+      echo $PWD
       usr/share/wazuh-dashboard/bin/opensearch-dashboards-plugin install --allow-root anomalyDetectionDashboards
+      find . -name '*anomaly*'
       chmod -R 755 usr/share/wazuh-dashboard
