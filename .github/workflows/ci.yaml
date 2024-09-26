@@ -68,28 +68,28 @@ jobs:
         run: |
           sudo snap refresh snapd
 
-      - name: Setup the required system configs OpenSearch
+      - name: Setup the required system configs Wazuh Indexer
         run: |
-          sudo snap install opensearch --channel=2/edge --revision=51
-          sudo snap connect opensearch:process-control
+          sudo snap install wazuh-indexer --channel=4/edge --devmode --revision=2
+          sudo snap connect wazuh-indexer:process-control
 
           sudo sysctl -w vm.swappiness=0
           sudo sysctl -w vm.max_map_count=262144
           sudo sysctl -w net.ipv4.tcp_retries2=5
 
-      - name: Connect required interfaces for OpenSearch
+      - name: Connect required interfaces for Wazuh Indexer
         run: |
-          sudo snap connect opensearch:log-observe
-          sudo snap connect opensearch:mount-observe
-          sudo snap connect opensearch:process-control
-          sudo snap connect opensearch:system-observe
-          sudo snap connect opensearch:sys-fs-cgroup-service
-          sudo snap connect opensearch:shmem-perf-analyzer
+          sudosnap connect wazuh-indexer:log-observe
+          sudosnap connect wazuh-indexer:mount-observe
+          sudosnap connect wazuh-indexer:process-control
+          sudosnap connect wazuh-indexer:system-observe
+          sudosnap connect wazuh-indexer:sys-fs-cgroup-service
+          sudosnap connect wazuh-indexer:shmem-perf-analyzer
 
-      - name: Setup and Start OpenSearch
+      - name: Setup and Start Wazuh Indexer
         run: |
           # create the certificates
-          sudo snap run opensearch.setup \
+          sudo snap run wazuh-indexer.setup \
               --node-name cm0 \
               --node-roles cluster_manager,data \
               --tls-priv-key-root-pass root1234 \
@@ -97,14 +97,14 @@ jobs:
               --tls-priv-key-node-pass node1234 \
               --tls-init-setup yes                 # this creates the root and admin certs as well.
 
-          # start opensearch
-          sudo snap start opensearch.daemon
+          # start wazuh-indexer
+          sudo snap start wazuh-indexer.daemon
 
           # wait a bit for it to fully initialize
           sleep 60s
 
           # create the security index
-          sudo snap run opensearch.security-init --tls-priv-key-admin-pass=admin1234
+          sudo snap run wazuh-indexer.security-init --tls-priv-key-admin-pass=admin1234
 
       - name: Download snap file for Wazuh Dashboard
         uses: actions/download-artifact@v3
