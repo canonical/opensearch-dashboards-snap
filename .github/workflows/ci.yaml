@@ -70,7 +70,7 @@ jobs:
 
       - name: Setup the required system configs OpenSearch
         run: |
-          sudo snap install opensearch --channel=2/edge --revision=51
+          sudo snap install opensearch --channel=2/edge --revision=58
           sudo snap connect opensearch:process-control
 
           sudo sysctl -w vm.swappiness=0
