@@ -158,3 +158,5 @@ parts:
       craftctl default
       usr/share/wazuh-dashboard/bin/opensearch-dashboards-plugin install --allow-root anomalyDetectionDashboards
       chmod -R 755 usr/share/wazuh-dashboard
+      find etc -type d -exec chmod +x {} \;
+      chmod +r etc -R
