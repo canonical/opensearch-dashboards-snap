@@ -22,13 +22,6 @@ package-repositories:
     suites: [jammy]
     key-id: 6676E3F1A76ADBE4488944BF7D1A96D4BF78C79E
     url: https://ppa.launchpadcontent.net/data-platform/prometheus-kibana-exporter/ubuntu
-# TODO: build from sources
-  - type: apt
-    components: [main]
-    suites: [stable]
-    key-id: 0DCFCA5547B19D2A6099506096B3EE5F29111145
-    key-server: https://packages.wazuh.com/key/GPG-KEY-WAZUH
-    url: https://packages.wazuh.com/4.x/apt/
 
 system-usernames:
   snap_daemon: shared
@@ -86,6 +79,8 @@ apps:
     plugs:
       - network
       - network-bind
+    environment:
+      WAZUH_CONFIG_PATH: ${SNAP_DATA_CURRENT}/config
 
   kibana-exporter-daemon:
     daemon: simple
@@ -132,12 +127,11 @@ parts:
       snap install node --channel=18/stable --classic
 
   wazuh-dashboard:
-    plugin: nil
+    source: https://people.canonical.com/~arturoseijas/wazuh-dashboard_4.9.2-1_amd64.deb
+    plugin: dump
     build-packages:
       - apt-transport-https
       - gnupg
-    stage-packages:
-      - wazuh-dashboard
     override-stage: |
       craftctl default
       sed -i -e 's/^\([^#].*\)/# \1/g' etc/wazuh-dashboard/opensearch_dashboards.yml
