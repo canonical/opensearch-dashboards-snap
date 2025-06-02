@@ -4,6 +4,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  RELEASE: edge
+
 on:
   workflow_call:
   pull_request:
@@ -66,6 +69,23 @@ jobs:
           version="$(yq .version < snap/snapcraft.yaml)"
 
           sudo snap install opensearch-dashboards_${version}_amd64.snap --dangerous --jailmode
+
+      - name: Set snap release channel
+        run: |
+          version="$(cat snap/snapcraft.yaml | yq .version)"
+          channel="${version}/${{env.RELEASE}}"
+          
+          echo "release: ${channel}/lp-${version}"
+          # echo "version=${version}" >> $GITHUB_ENV
+          # echo "channel=${channel}" >> $GITHUB_ENV
+
+      # - name: Publish snap to Store
+      #   uses: snapcore/action-publish@v1
+      #   env:
+      #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+      #   with:
+      #     snap: opensearch_${{env.version}}_amd64.snap
+      #     release: ${{env.channel}}/lp-${{env.version}}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.30.0
