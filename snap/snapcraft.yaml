@@ -138,8 +138,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-build: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   anomaly-detection-dashboards-plugin:
     plugin: nil
@@ -148,8 +148,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-assistant:
     plugin: nil
@@ -158,8 +158,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-maps:
     plugin: nil
@@ -168,8 +168,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-flow-framework:
     plugin: nil
@@ -178,8 +178,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-visualizations:
     plugin: nil
@@ -188,8 +188,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   index-management-dashboards-plugin:
     plugin: nil
@@ -198,8 +198,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   ml-commons-dashboards:
     plugin: nil
@@ -208,8 +208,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-notifications:
     plugin: nil
@@ -218,8 +218,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-observability:
     plugin: nil
@@ -228,8 +228,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   query-insights-dashboards:
     plugin: nil
@@ -238,8 +238,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-query-workbench:
     plugin: nil
@@ -248,8 +248,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-reporting:
     plugin: nil
@@ -258,8 +258,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   dashboards-search-relevance:
     plugin: nil
@@ -268,8 +268,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   security-analytics-dashboards-plugin:
     plugin: nil
@@ -278,8 +278,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   security-dashboards-plugin:
     plugin: nil
@@ -288,8 +288,8 @@ parts:
     source-tag: lp-v2.19.1.0
     source-depth: 1
     override-stage: |
-      mkdir -p ./plugins/${CRAFT_PART_NAME}
-      cp -r "${CRAFT_PART_SRC}/." ./plugins/${CRAFT_PART_NAME}
+      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
+      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
 
   opensearch-dashboards:
     after:
