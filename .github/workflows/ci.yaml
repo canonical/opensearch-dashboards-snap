@@ -61,7 +61,7 @@ jobs:
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
-          snap: opensearch_${{env.version}}_amd64.snap
+          snap: opensearch-dashboards_${{env.version}}_amd64.snap
           release: ${{env.channel}}/dpe-7434
 
   scan:
