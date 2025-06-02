@@ -1,7 +1,7 @@
 name: opensearch-dashboards
 base: core24
 
-version: '2.19.1'
+version: '2.19.1-standalone'
 
 summary: 'OpenSearch Dashboards: community-driven OpenSearch visualization suite.'
 description: |
@@ -15,14 +15,6 @@ confinement: strict
 
 platforms:
   amd64:
-
-
-package-repositories:
-  - type: apt
-    components: [main]
-    suites: [noble]
-    key-id: 250888D21C2C3843BB4D5E35EB948C132E00C6DB
-    url: https://ppa.launchpadcontent.net/gabrielcocenza/prometheus-opensearch-dashboards-exporter/ubuntu
 
 
 system-usernames:
@@ -70,9 +62,6 @@ environment:
   OPENSEARCH_DASHBOARDS_VARLIB: ${SNAP_COMMON}/var/lib/opensearch-dashboards
   OPENSEARCH_DASHBOARDS_TMPDIR: ${SNAP_COMMON}/usr/share/tmp
 
-  # include the dist-packages to be able to run the exporter
-  PYTHONPATH: "$SNAP/usr/lib/python3/dist-packages:$PYTHONPATH"
-
 
 apps:
   opensearch-dashboards-daemon:
@@ -85,18 +74,6 @@ apps:
       - network
       - network-bind
 
-  exporter-daemon:
-    daemon: simple
-    after:
-      - opensearch-dashboards-daemon
-    install-mode: disable
-    command: opt/opensearch-dashboards/start-exporter.sh
-    restart-condition: always
-    restart-delay: 5s
-    plugs:
-      - network
-      - network-bind
-
 
 parts:
   dependencies:
@@ -105,7 +82,6 @@ parts:
       - yq
     stage-packages:
       - util-linux
-      - prometheus-opensearch-dashboards-exporter
 
   wrapper-scripts:
     plugin: nil
@@ -316,8 +292,9 @@ parts:
     source-tag: lp-v2.19.1
     source-depth: 1
     override-build: |
-      version="$(craftctl get version)"
- 
+      tag_version="$(craftctl get version)"
+      version="${tag_version%%-*}"
+
       npm install -g corepack
       corepack enable
       corepack install     
