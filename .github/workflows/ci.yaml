@@ -15,7 +15,7 @@ jobs:
   build:
     name: Build Snap
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 100
     outputs:
       snap-file: ${{ steps.build-snap.outputs.snap }}
     steps:
@@ -51,19 +51,18 @@ jobs:
       - name: Set snap release channel
         run: |
           version="$(cat snap/snapcraft.yaml | yq .version)"
-          channel="${version}/${{env.RELEASE}}"
+          channel="${version%%.*}/${{env.RELEASE}}"
           
-          echo "release: ${channel}/lp-${version}"
-          # echo "version=${version}" >> $GITHUB_ENV
-          # echo "channel=${channel}" >> $GITHUB_ENV
+          echo "version=${version}" >> $GITHUB_ENV
+          echo "channel=${channel}" >> $GITHUB_ENV
 
-      # - name: Publish snap to Store
-      #   uses: snapcore/action-publish@v1
-      #   env:
-      #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
-      #   with:
-      #     snap: opensearch_${{env.version}}_amd64.snap
-      #     release: ${{env.channel}}/lp-${{env.version}}
+      - name: Publish snap to Store
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: opensearch_${{env.version}}_amd64.snap
+          release: ${{env.channel}}/dpe-7434
 
   scan:
     name: Trivy scan and SBOM Generation
