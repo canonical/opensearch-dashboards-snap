@@ -62,7 +62,7 @@ jobs:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
           snap: opensearch-dashboards_${{env.version}}_amd64.snap
-          release: ${{env.channel}}/dpe-7434
+          release: ${{env.channel}}/dpe-7435
 
   scan:
     name: Trivy scan and SBOM Generation
