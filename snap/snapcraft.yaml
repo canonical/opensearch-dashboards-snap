@@ -317,43 +317,63 @@ parts:
     source-depth: 1
     override-build: |
       version="$(craftctl get version)"
-
+ 
       npm install -g corepack
       corepack enable
-      corepack install
+      corepack install     
 
-      # --allow-root flag is not forwarded to build scripts, bypass check
-      rootchecker=src/setup_node_env/root/force.js
-      cp "${rootchecker}" "${rootchecker}.bak"
-      echo "module.exports = () => true" > "${rootchecker}"
+      BUILDER_HOME="/home/builder"
+      BUILDER_WORKSPACE="${BUILDER_HOME}/buildercraft"
+      useradd -m -d "${BUILDER_HOME}" builder
+      mkdir -p "${BUILDER_WORKSPACE}"
 
-      # Install dependencies and run build scripts
-      NODE_ENV=development yarn osd bootstrap
-      NODE_ENV=production scripts/use_node scripts/build --linux --skip-os-packages --skip-archives --release
+      # Copy repo content
+      shopt -s dotglob
+      cp -r "${CRAFT_PART_BUILD}"/* "${BUILDER_WORKSPACE}"
+      shopt -u dotglob
+      chown -R builder:builder "${BUILDER_WORKSPACE}"
 
-      distdir="${CRAFT_PART_BUILD}/build/opensearch-dashboards-${version}-linux-x64"
+      BUILD_OSD_SCRIPT='
+        cd "${BUILDER_WORKSPACE}"
 
-      # Build and Install plugins
-      pluginbin="${distdir}/bin/opensearch-dashboards-plugin"
-      pluginsdir="${CRAFT_PART_BUILD}/plugins"
-      mv "${CRAFT_STAGE}/plugins"/* "${pluginsdir}"
+        # Install dependencies and run build scripts
+        NODE_ENV=development yarn osd bootstrap 
+        NODE_ENV=production scripts/use_node scripts/build --linux --skip-os-packages --skip-archives --release
+      '
+        
+      runuser -u builder -- env BUILDER_WORKSPACE="${BUILDER_WORKSPACE}" bash -c "${BUILD_OSD_SCRIPT}"
 
-      for plugin_dir in "${pluginsdir}"/*; do
-        NODE_ENV=development yarn --cwd "${plugin_dir}" install
-        NODE_ENV=production yarn --cwd "${plugin_dir}" build
+      # Move plugins to opensearch-dashboards repo
+      mv "${CRAFT_STAGE}/plugins"/* "${BUILDER_WORKSPACE}/plugins"
+      chown -R builder:builder "${BUILDER_WORKSPACE}/plugins"
+      BUILD_PLUGINS_SCRIPT='
+        # Build and Install plugins
+        cd "${BUILDER_WORKSPACE}"
+        distdir="${BUILDER_WORKSPACE}/build/opensearch-dashboards-${version}-linux-x64"
+        pluginbin="${distdir}/bin/opensearch-dashboards-plugin"
+        pluginsdir="${BUILDER_WORKSPACE}/plugins"
 
-        # no consistent naming convention for the zipfile across plugins
-        artifact=$(find "${plugin_dir}/build" -maxdepth 1 -type f -name '*.zip' | head -n1)
+        for plugin_dir in "${pluginsdir}"/*; do
+          NODE_ENV=development yarn --cwd "${plugin_dir}" install
+          NODE_ENV=production yarn --cwd "${plugin_dir}" build
 
-        "${pluginbin}" install "file://${artifact}"
-      done
+          # no consistent naming convention for the zipfile across plugins
+          artifact=$(find "${plugin_dir}/build" -maxdepth 1 -type f -name '*.zip' | head -n1)
 
-      # Add back root checking script
-      mv "${rootchecker}.bak" "${distdir}/${rootchecker}"
+          "${pluginbin}" install "file://${artifact}"
+        done
+      '
+
+      runuser -u builder -- env BUILDER_WORKSPACE="${BUILDER_WORKSPACE}" version="${version}" bash -c "${BUILD_PLUGINS_SCRIPT}"
+
+      mv "${BUILDER_WORKSPACE}/build" "${CRAFT_PART_BUILD}"
+      chown -R root:root ${CRAFT_PART_BUILD}/*
+      userdel -r builder
 
       mkdir -p "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards"
       mkdir -p "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
 
+      distdir="${CRAFT_PART_BUILD}/build/opensearch-dashboards-${version}-linux-x64"
       cp "$CRAFT_PROJECT_DIR/config/opensearch_dashboards.yml" "${distdir}"/config/
       cp "${distdir}"/config/* "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
 
