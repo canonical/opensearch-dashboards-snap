@@ -81,6 +81,7 @@ parts:
     stage-snaps:
       - yq
     stage-packages:
+      - curl
       - util-linux
 
   wrapper-scripts:
