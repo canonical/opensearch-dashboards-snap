@@ -1,7 +1,7 @@
 name: opensearch-dashboards
 base: core24
 
-version: '2.19.1'
+version: '2.19.2'
 
 summary: 'OpenSearch Dashboards: community-driven OpenSearch visualization suite.'
 description: |
@@ -112,7 +112,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/alerting-dashboards-plugin
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-build: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -122,7 +122,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/anomaly-detection-dashboards-plugin
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -132,7 +132,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-assistant
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -142,7 +142,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-maps
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -152,7 +152,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-flow-framework
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -162,7 +162,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-visualizations
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -172,7 +172,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/index-management-dashboards-plugin
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -182,7 +182,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/ml-commons-dashboards
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -192,7 +192,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-notifications
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -202,7 +202,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-observability
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -212,7 +212,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/query-insights-dashboards
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -222,7 +222,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-query-workbench
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -232,7 +232,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-reporting
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -242,7 +242,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/dashboards-search-relevance
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -252,7 +252,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/security-analytics-dashboards-plugin
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -262,7 +262,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/security-dashboards-plugin
     source-type: git
-    source-tag: lp-v2.19.1.0
+    source-tag: lp-v2.19.2.0
     source-depth: 1
     override-stage: |
       mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
@@ -290,7 +290,7 @@ parts:
     plugin: nil
     source: https://git.launchpad.net/opensearch-dashboards
     source-type: git
-    source-tag: lp-v2.19.1
+    source-tag: lp-v2.19.2
     source-depth: 1
     override-build: |
       tag_version="$(craftctl get version)"
