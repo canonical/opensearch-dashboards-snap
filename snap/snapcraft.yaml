@@ -179,7 +179,7 @@ parts:
 
       mv "${CRAFT_PART_INSTALL}"/config/* "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
       declare -a resources=(
-        assets  bin  data manifest.yml node  node_modules  package.json  plugins  src LICENSE.txt  NOTICE.txt  README.txt
+        assets  bin  data  manifest.yml  node  node_modules  package.json  plugins  src LICENSE.txt  NOTICE.txt  README.txt
       )
 
       for res in "${resources[@]}"; do
