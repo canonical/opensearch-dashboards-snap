@@ -132,7 +132,7 @@ parts:
       sed -i -E 's|https://github\.com/opensearch-project/([^[:space:]/]+)\.git|https://git.launchpad.net/\1|g' "${MANIFEST_FILE}"
 
       # replace all tags with lp-v${version}.0
-      sed -i "s|ref: tags/${version}.0|ref: tags/${LP_VERSION_TAG}|g" "${MANIFEST_FILE}"
+      sed -i -E "s|ref: tags/${version}(\.0)?|ref: tags/${LP_VERSION_TAG}|g" "${MANIFEST_FILE}"
 
       # Create build user
       BUILDER_HOME="/home/opensearch"
