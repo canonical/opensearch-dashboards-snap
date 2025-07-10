@@ -83,6 +83,7 @@ parts:
     stage-packages:
       - curl
       - util-linux
+      - python3
 
   wrapper-scripts:
     plugin: nil
@@ -107,259 +108,82 @@ parts:
     override-build: |
       snap install node --channel=18/stable --classic
 
-  # Plugins 
-  alerting-dashboards-plugin:
-    plugin: nil
-    source: https://git.launchpad.net/alerting-dashboards-plugin
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-build: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  anomaly-detection-dashboards-plugin:
-    plugin: nil
-    source: https://git.launchpad.net/anomaly-detection-dashboards-plugin
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-assistant:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-assistant
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-maps:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-maps
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-flow-framework:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-flow-framework
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-visualizations:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-visualizations
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  index-management-dashboards-plugin:
-    plugin: nil
-    source: https://git.launchpad.net/index-management-dashboards-plugin
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  ml-commons-dashboards:
-    plugin: nil
-    source: https://git.launchpad.net/ml-commons-dashboards
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-notifications:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-notifications
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-observability:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-observability
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  query-insights-dashboards:
-    plugin: nil
-    source: https://git.launchpad.net/query-insights-dashboards
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-query-workbench:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-query-workbench
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-reporting:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-reporting
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  dashboards-search-relevance:
-    plugin: nil
-    source: https://git.launchpad.net/dashboards-search-relevance
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  security-analytics-dashboards-plugin:
-    plugin: nil
-    source: https://git.launchpad.net/security-analytics-dashboards-plugin
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  security-dashboards-plugin:
-    plugin: nil
-    source: https://git.launchpad.net/security-dashboards-plugin
-    source-type: git
-    source-tag: lp-v2.19.2.0
-    source-depth: 1
-    override-stage: |
-      mkdir -p "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-      cp -r "${CRAFT_PART_SRC}/." "${CRAFT_STAGE}/plugins/${CRAFT_PART_NAME}"
-
-  opensearch-dashboards:
+  opensearch-build:
     after:
-      - nodejs
-      - alerting-dashboards-plugin
-      - anomaly-detection-dashboards-plugin
-      - dashboards-assistant
-      - dashboards-maps
-      - dashboards-flow-framework
-      - dashboards-visualizations
-      - index-management-dashboards-plugin
-      - ml-commons-dashboards
-      - dashboards-notifications
-      - dashboards-observability
-      - query-insights-dashboards
-      - dashboards-query-workbench
-      - dashboards-reporting
-      - dashboards-search-relevance
-      - security-analytics-dashboards-plugin
-      - security-dashboards-plugin
+    - dependencies
     plugin: nil
-    source: https://git.launchpad.net/opensearch-dashboards
+    source: https://github.com/opensearch-project/opensearch-build
     source-type: git
-    source-tag: lp-v2.19.2
+    source-tag: 2.19.2
     source-depth: 1
+    build-packages:
+      - python3.12-venv
+      - jq
     override-build: |
-      tag_version="$(craftctl get version)"
-      version="${tag_version%%-*}"
+      apt-get update
+      version="$(craftctl get version)"
+      LP_VERSION_TAG="lp-v${version}.0"
+      MANIFEST_FILE="${CRAFT_PART_BUILD}/manifests/${version}/opensearch-dashboards-${version}.yml"
 
-      npm install -g corepack
-      corepack enable
-      corepack install     
+      # remove functionalTestDashboards plugin from manifest
+      yq -i 'del(.components[] | select(.name == "functionalTestDashboards"))' "${MANIFEST_FILE}"
+      
+      awk '/repository: https:\/\/github.com\/opensearch-project\// { print tolower($0); next } { print }' "${MANIFEST_FILE}" > tmp && mv tmp "${MANIFEST_FILE}"
+      sed -i -E 's|https://github\.com/opensearch-project/([^[:space:]/]+)\.git|https://git.launchpad.net/\1|g' "${MANIFEST_FILE}"
 
-      BUILDER_HOME="/home/builder"
-      BUILDER_WORKSPACE="${BUILDER_HOME}/buildercraft"
-      useradd -m -d "${BUILDER_HOME}" builder
-      mkdir -p "${BUILDER_WORKSPACE}"
+      # replace all tags with lp-v${version}.0
+      sed -i "s|ref: tags/${version}.0|ref: tags/${LP_VERSION_TAG}|g" "${MANIFEST_FILE}"
+
+      # Create build user
+      BUILDER_HOME="/home/opensearch"
+      BASE_BUILD_DIR="${BUILDER_HOME}/opensearch-build"
+      useradd -m -d "${BUILDER_HOME}" opensearch
+      mkdir -p "${BASE_BUILD_DIR}"
+      
+      # create dummy nvm.sh and nvm bin which do nothing (opensearch-dashboards build scripts expect nvm)
+      echo '#!/bin/sh' > /nvm.sh
+      echo 'true' >> /nvm.sh
+      chmod +x /nvm.sh
+
+      mkdir -p /opt/dummybin
+      echo '#!/bin/sh' > /opt/dummybin/nvm
+      echo 'true' >> /opt/dummybin/nvm
+      chmod -R 755 /opt/dummybin
+
+      echo 'export PATH="/opt/dummybin:$PATH"' >> ${BUILDER_HOME}/.profile
 
       # Copy repo content
       shopt -s dotglob
-      cp -r "${CRAFT_PART_BUILD}"/* "${BUILDER_WORKSPACE}"
+      cp -r "${CRAFT_PART_BUILD}"/* "${BASE_BUILD_DIR}"
       shopt -u dotglob
-      chown -R builder:builder "${BUILDER_WORKSPACE}"
+      chown -R opensearch:opensearch "${BASE_BUILD_DIR}"
 
-      BUILD_OSD_SCRIPT='
-        cd "${BUILDER_WORKSPACE}"
+      # Build and assemble
+      manifest="${BASE_BUILD_DIR}/manifests/${version}/opensearch-dashboards-${version}.yml"
+      cmd="cd ${BASE_BUILD_DIR}
+      python3 -m venv venv
+      . venv/bin/activate
+      pip install pipenv
+      export PIPENV_PIPFILE=${CRAFT_PART_BUILD}/Pipfile
+      python3 -m pipenv install --deploy --system
+      bash build.sh '${manifest}'
+      bash assemble.sh tar/builds/opensearch-dashboards/manifest.yml"
+      su - opensearch -c "${cmd}"
 
-        # Install dependencies and run build scripts
-        NODE_ENV=development yarn osd bootstrap 
-        NODE_ENV=production scripts/use_node scripts/build --linux --skip-os-packages --skip-archives --release
-      '
-        
-      runuser -u builder -- env BUILDER_WORKSPACE="${BUILDER_WORKSPACE}" bash -c "${BUILD_OSD_SCRIPT}"
-
-      # Move plugins to opensearch-dashboards repo
-      mv "${CRAFT_STAGE}/plugins"/* "${BUILDER_WORKSPACE}/plugins"
-      chown -R builder:builder "${BUILDER_WORKSPACE}/plugins"
-      BUILD_PLUGINS_SCRIPT='
-        # Build and Install plugins
-        cd "${BUILDER_WORKSPACE}"
-        distdir="${BUILDER_WORKSPACE}/build/opensearch-dashboards-${version}-linux-x64"
-        pluginbin="${distdir}/bin/opensearch-dashboards-plugin"
-        pluginsdir="${BUILDER_WORKSPACE}/plugins"
-
-        for plugin_dir in "${pluginsdir}"/*; do
-          NODE_ENV=development yarn --cwd "${plugin_dir}" install
-          NODE_ENV=production yarn --cwd "${plugin_dir}" build
-
-          # no consistent naming convention for the zipfile across plugins
-          artifact=$(find "${plugin_dir}/build" -maxdepth 1 -type f -name '*.zip' | head -n1)
-
-          "${pluginbin}" install "file://${artifact}"
-        done
-      '
-
-      runuser -u builder -- env BUILDER_WORKSPACE="${BUILDER_WORKSPACE}" version="${version}" bash -c "${BUILD_PLUGINS_SCRIPT}"
-
-      mv "${BUILDER_WORKSPACE}/build" "${CRAFT_PART_BUILD}"
-      chown -R root:root ${CRAFT_PART_BUILD}/*
-      userdel -r builder
+      # Extract and arrange
+      archive="${BASE_BUILD_DIR}/tar/dist/opensearch-dashboards/opensearch-dashboards-${version}-linux-x64.tar.gz"
+      tar -xzf "${archive}" -C "${CRAFT_PART_INSTALL}/" --strip-components=1
 
       mkdir -p "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards"
       mkdir -p "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
 
-      distdir="${CRAFT_PART_BUILD}/build/opensearch-dashboards-${version}-linux-x64"
-      cp "$CRAFT_PROJECT_DIR/config/opensearch_dashboards.yml" "${distdir}"/config/
-      cp "${distdir}"/config/* "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
-
+      mv "${CRAFT_PART_INSTALL}"/config/* "${CRAFT_PART_INSTALL}/etc/opensearch-dashboards/"
       declare -a resources=(
-        assets  bin  data  node  node_modules  package.json  plugins  src LICENSE.txt  NOTICE.txt  README.txt
+        assets  bin  data manifest.yml node  node_modules  package.json  plugins  src LICENSE.txt  NOTICE.txt  README.txt
       )
 
       for res in "${resources[@]}"; do
-          mv "${distdir}/${res}" "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/"
+          mv "${CRAFT_PART_INSTALL}/${res}" "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/"
       done
       chmod -R 755 "${CRAFT_PART_INSTALL}/usr/share/opensearch-dashboards/bin"
+
