@@ -207,6 +207,63 @@ jobs:
             exit 1
           fi
 
+      - name: Test Prometheus Exporter
+        run: |
+          URL=http://localhost:9684/metrics
+
+          # Wait until the service esteblishes
+          metrics=$(curl ${URL} \
+            --connect-timeout 5 \
+            --retry 5 \
+            --retry-delay 5 \
+            --retry-max-time 60 \
+            --retry-connrefused)
+
+          if [[ "$metrics" ==  *"opensearch_dashboards_up 0.0"* ]]; then
+            echo "ERROR: Prometheus exporter unavailable (connected to OSD on HTTP). Aborting..." >&2
+            exit 1
+          fi
+
+          echo "Successfully connected to the Exporter service"
+
+          sudo snap set opensearch-dashboards scheme=https
+          sudo snap restart opensearch-dashboards
+          sleep 10
+
+          # Wait until the service establishes
+          metrics=$(curl ${URL} \
+            --connect-timeout 5 \
+            --retry 5 \
+            --retry-delay 5 \
+            --retry-max-time 60 \
+            --retry-connrefused)
+
+           if [[ "$metrics" ==  *"opensearch_dashboards_up 1.0"* ]]; then
+            echo "ERROR: Prometheus exporter available when it should be connecting to a non-existent service. Aborting..." >&2
+            exit 1
+          fi
+
+          echo "Exporter was down when it was supposed to be"
+
+          # Wrong setting defaults to HTTP, so the exporter should work
+          sudo snap set opensearch-dashboards scheme=httpblabla
+          sudo snap restart opensearch-dashboards
+          sleep 10
+
+          # Wait until the service establishes
+          metrics=$(curl ${URL} \
+            --connect-timeout 5 \
+            --retry 5 \
+            --retry-delay 5 \
+            --retry-max-time 60 \
+            --retry-connrefused)
+          if [[ "$metrics" ==  *"opensearch_dashboards_up 0.0"* ]]; then
+            echo "ERROR: Prometheus exporter unavailable (connected to OSD on HTTP). Aborting..." >&2
+            exit 1
+          fi
+
+          echo "Snap defaults correctly applied as Exporter settings"
+
       - name: Test Logs slot
         run: |
           logs_slot_avail=$(sudo snap connections opensearch-dashboards | grep opensearch-dashboards:logs)
