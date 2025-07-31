@@ -21,7 +21,7 @@ with running and scaling your OpenSearch clusters.
 
 or:
 ```
-sudo snap install opensearch-dashboards --channel=2/edge
+sudo snap install opensearch-dashboards --channel=3/edge
 ```
 
 ### Starting OpenSearch Dashboards:
