@@ -9,6 +9,8 @@ description: |
     user interface that lets you visualize your OpenSearch data and run and scale
     your OpenSearch clusters.
 
+license: 'Apache-2.0'
+
 grade: stable
 
 confinement: strict
