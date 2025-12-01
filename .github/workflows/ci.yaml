@@ -45,6 +45,21 @@ jobs:
           name: opensearch-dashboards_snap_amd64
           path: "opensearch-dashboards_*.snap"
 
+      - name: Set snap release channel
+        run: |
+          version="$(cat snap/snapcraft.yaml | yq .version)"
+          channel="${version%%.*}/edge/test-release"
+          
+          echo "version=${version}" >> $GITHUB_ENV
+          echo "channel=${channel}" >> $GITHUB_ENV
+      - name: Publish snap to Store
+        id: publish
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: opensearch-dashboards_${{env.version}}_amd64.snap
+          release: ${{env.channel}}
   scan:
     name: Trivy scan and SBOM Generation
     needs: build

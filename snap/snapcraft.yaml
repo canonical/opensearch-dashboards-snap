@@ -1,7 +1,7 @@
 name: opensearch-dashboards
 base: core24
 
-version: '2.19.2'
+version: '2.19.4'
 
 summary: 'OpenSearch Dashboards: community-driven OpenSearch visualization suite.'
 description: |
@@ -133,7 +133,7 @@ parts:
       version="$(craftctl get version)"
       series="${version%%.*}.x"
       patch="ubuntu0"
-      release_date="20250721150133"
+      release_date="20251201170946"
       archive="opensearch-dashboards-${version}-${patch}-${release_date}-linux-x64.tar.gz"
 
       # Download Opensearch Dashboards
