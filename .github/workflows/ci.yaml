@@ -68,7 +68,7 @@ jobs:
           sudo snap install opensearch-dashboards_${version}_amd64.snap --dangerous --jailmode
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.30.0
+        uses: aquasecurity/trivy-action@0.35.0
         with:
           scan-type: "fs"
           scan-ref: /snap/opensearch-dashboards/current/usr/share/opensearch-dashboards/
@@ -77,13 +77,13 @@ jobs:
           scanners: "vuln"
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: "trivy-results.sarif"
 
       - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
-        uses: aquasecurity/trivy-action@0.30.0
+        uses: aquasecurity/trivy-action@0.35.0
         with:
           scan-type: "fs"
           scan-ref: /snap/opensearch-dashboards/current/usr/share/opensearch-dashboards/
