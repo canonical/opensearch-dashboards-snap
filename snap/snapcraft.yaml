@@ -128,8 +128,6 @@ parts:
 
   opensearch-dashboards:
     plugin: nil
-    build-packages:
-      - jq
     source: .
     override-build: |
       version="$(craftctl get version)"
