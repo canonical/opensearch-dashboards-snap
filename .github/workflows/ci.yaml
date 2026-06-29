@@ -49,6 +49,8 @@ jobs:
     name: Trivy scan and SBOM Generation
     needs: build
     runs-on: ubuntu-22.04
+    permissions:
+      security-events: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
