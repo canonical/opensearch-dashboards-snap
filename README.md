@@ -10,9 +10,7 @@
 [//]: # (  <br />)
 [//]: # (</h1>)
 
-This is the snap package for [OpenSearch Dashboards](https://opensearch.org/docs/latest/dashboards/), a
-community-driven, Apache 2.0-licensed user interface that lets you visualize your OpenSearch data, together
-with running and scaling your OpenSearch clusters.
+This is the snap package for [OpenSearch Dashboards](https://opensearch.org/docs/latest/dashboards/), a community-driven, Apache 2.0-licensed user interface that lets you visualize your OpenSearch data, together with running and scaling your OpenSearch clusters.
 
 
 
